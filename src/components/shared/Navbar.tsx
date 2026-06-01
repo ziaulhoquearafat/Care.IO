@@ -5,8 +5,13 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
+import LogoutButton from "@/components/shared/LogoutButton";
 
-export function Navbar() {
+interface NavbarProps {
+  isLoggedIn?: boolean;
+}
+
+export function Navbar({ isLoggedIn = false }: NavbarProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -39,17 +44,35 @@ export function Navbar() {
           >
             About
           </Link>
+          {isLoggedIn && (
+            <Link
+              href="/my-bookings"
+              className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              My Bookings
+            </Link>
+          )}
         </nav>
 
         {/* Desktop Action Buttons & ThemeToggle */}
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
-          <Link href="/login">
-            <Button variant="ghost">Login</Button>
-          </Link>
-          <Link href="/register">
-            <Button>Register</Button>
-          </Link>
+          {isLoggedIn ? (
+            <LogoutButton />
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" size="sm" className="h-8 text-[11px] font-bold rounded-none cursor-pointer">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button size="sm" className="h-8 text-[11px] font-bold rounded-none cursor-pointer">
+                  Register
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile View Toggles */}
@@ -92,18 +115,35 @@ export function Navbar() {
             >
               About
             </Link>
+            {isLoggedIn && (
+              <Link
+                href="/my-bookings"
+                onClick={() => setIsOpen(false)}
+                className="block rounded-md px-3 py-2 text-base font-semibold text-primary hover:bg-muted hover:text-primary transition-all animate-pulse"
+              >
+                My Bookings
+              </Link>
+            )}
 
             <div className="mt-4 border-t border-foreground/10 pt-4 flex flex-col gap-2">
-              <Link href="/login" onClick={() => setIsOpen(false)} className="w-full">
-                <Button variant="outline" className="w-full justify-center">
-                  Login
-                </Button>
-              </Link>
-              <Link href="/register" onClick={() => setIsOpen(false)} className="w-full">
-                <Button className="w-full justify-center">
-                  Register
-                </Button>
-              </Link>
+              {isLoggedIn ? (
+                <div onClick={() => setIsOpen(false)} className="w-full flex justify-center">
+                  <LogoutButton />
+                </div>
+              ) : (
+                <>
+                  <Link href="/login" onClick={() => setIsOpen(false)} className="w-full">
+                    <Button variant="outline" className="w-full justify-center rounded-none h-9 text-xs font-semibold">
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/register" onClick={() => setIsOpen(false)} className="w-full">
+                    <Button className="w-full justify-center rounded-none h-9 text-xs font-semibold">
+                      Register
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

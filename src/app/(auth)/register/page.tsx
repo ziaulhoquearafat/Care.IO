@@ -2,75 +2,10 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Heart, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { IApiResponse } from "@/types";
+import RegisterForm from "@/components/forms/RegisterForm";
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [contact, setContact] = React.useState("");
-  const [nid, setNid] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
-  const [submitting, setSubmitting] = React.useState(false);
-  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = React.useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg(null);
-    setSuccessMsg(null);
-
-    // Simple fields check
-    if (!name || !email || !contact || !nid || !password) {
-      setErrorMsg("All registration fields are required.");
-      return;
-    }
-
-    // Password validation (at least 6 characters, one upper, one lower)
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-    if (!passwordRegex.test(password)) {
-      setErrorMsg(
-        "Password must be at least 6 characters, contain at least one uppercase and one lowercase letter."
-      );
-      return;
-    }
-
-    setSubmitting(true);
-
-    try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, contact, nid, password }),
-      });
-
-      const result: IApiResponse = await response.json();
-
-      if (result.success) {
-        setSuccessMsg("Account created successfully! Logging you in...");
-        setTimeout(() => {
-          router.push("/");
-          router.refresh();
-        }, 1500);
-      } else {
-        setErrorMsg(result.message || "Registration failed.");
-      }
-    } catch (err) {
-      console.error("Register client error:", err);
-      setErrorMsg("A system error occurred. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
     <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-background select-none">
       
@@ -131,113 +66,8 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          {/* Alert messages */}
-          {errorMsg && (
-            <div className="rounded-none border border-destructive/20 bg-destructive/5 px-4 py-3 text-xs text-destructive">
-              {errorMsg}
-            </div>
-          )}
-
-          {successMsg && (
-            <div className="rounded-none border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-xs text-emerald-600">
-              {successMsg}
-            </div>
-          )}
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            
-            {/* Name */}
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="name" className="text-xs font-semibold">
-                Full Name
-              </Label>
-              <Input
-                id="name"
-                type="text"
-                placeholder="John Doe"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="w-full"
-              />
-            </div>
-
-            {/* Email */}
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="email" className="text-xs font-semibold">
-                Email Address
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="john@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Contact */}
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="contact" className="text-xs font-semibold">
-                  Contact Number
-                </Label>
-                <Input
-                  id="contact"
-                  type="tel"
-                  placeholder="+880 17..."
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  required
-                  className="w-full"
-                />
-              </div>
-
-              {/* NID */}
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="nid" className="text-xs font-semibold">
-                  NID Number
-                </Label>
-                <Input
-                  id="nid"
-                  type="text"
-                  placeholder="e.g. 199923..."
-                  value={nid}
-                  onChange={(e) => setNid(e.target.value)}
-                  required
-                  className="w-full"
-                />
-              </div>
-            </div>
-
-            {/* Password */}
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="password" className="text-xs font-semibold">
-                Password
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="At least 6 characters, 1 uppercase, 1 lowercase"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full"
-              />
-            </div>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              disabled={submitting}
-              className="mt-2 h-11 w-full font-bold rounded-none cursor-pointer transition-transform hover:scale-[1.02] active:scale-95 text-xs"
-            >
-              {submitting ? "Creating account..." : "Create Account"}
-            </Button>
-          </form>
+          {/* Extracted RegisterForm Component */}
+          <RegisterForm />
 
           {/* Direct link to Login */}
           <div className="text-center text-xs text-muted-foreground border-t border-foreground/10 pt-4">

@@ -7,15 +7,16 @@ import Footer from "@/components/shared/Footer";
 
 interface ConditionalLayoutProps {
   children: React.ReactNode;
+  isLoggedIn?: boolean;
 }
 
-export function ConditionalLayout({ children }: ConditionalLayoutProps) {
+export function ConditionalLayout({ children, isLoggedIn = false }: ConditionalLayoutProps) {
   const pathname = usePathname();
   const isAuthRoute = pathname === "/login" || pathname === "/register";
 
   return (
     <>
-      {!isAuthRoute && <Navbar />}
+      {!isAuthRoute && <Navbar isLoggedIn={isLoggedIn} />}
       <main className="flex-grow flex flex-col">{children}</main>
       {!isAuthRoute && <Footer />}
     </>

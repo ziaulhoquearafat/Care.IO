@@ -27,6 +27,7 @@ export interface IService {
   description: string;
   category: ServiceCategory;
   price: number;
+  imageUrl?: string;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }

@@ -21,6 +21,9 @@ const serviceSchema = new Schema<IService>(
       type: Number,
       required: [true, "Service price is required"],
     },
+    imageUrl: {
+      type: String,
+    },
   },
   {
     timestamps: true,

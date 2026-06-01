@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
+import Banner from "@/components/home/Banner";
 
 export default function Home() {
   return (
-    <div>
-      <Button>Hello</Button>
+    <div className="flex flex-col w-full">
+      <Banner />
     </div>
   );
 }

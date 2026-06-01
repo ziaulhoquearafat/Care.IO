@@ -66,9 +66,9 @@ export interface IPayment {
 }
 
 // 6. Generic API Response Interface (For consistent backend responses)
-export interface IApiResponse<T = any> {
+export interface IApiResponse<T = unknown> {
   success: boolean;
   message: string;
   data?: T;
-  error?: string | any;
+  error?: string | unknown;
 }

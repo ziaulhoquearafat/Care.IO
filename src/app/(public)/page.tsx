@@ -2,6 +2,12 @@ import { dbConnect } from "@/lib/dbConnect";
 import Service from "@/models/Service";
 import Banner from "@/components/home/Banner";
 import ServiceCard from "@/components/home/ServiceCard";
+import Stats from "@/components/home/Stats";
+import HowItWorks from "@/components/home/HowItWorks";
+import WhyUs from "@/components/home/WhyUs";
+import Testimonials from "@/components/home/Testimonials";
+import FAQ from "@/components/home/FAQ";
+import CTA from "@/components/home/CTA";
 
 export default async function Home() {
   // 1. Establish direct database connection on the server
@@ -24,12 +30,16 @@ export default async function Home() {
   });
 
   return (
-    <div className="flex flex-col w-full bg-background min-h-screen">
-      {/* Hero Banner */}
+    <div className="flex flex-col w-full bg-background min-h-screen gap-16 lg:gap-24 pb-16">
+      
+      {/* 1. Hero Banner */}
       <Banner />
 
-      {/* Premium Services Grid Section */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 w-full">
+      {/* 2. Stats Section */}
+      <Stats />
+
+      {/* 3. Premium Services Grid Section */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center gap-2 mb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <h2 className="font-heading text-2xl font-extrabold text-foreground sm:text-3xl tracking-tight">
@@ -67,6 +77,22 @@ export default async function Home() {
           </div>
         )}
       </section>
+
+      {/* 4. How It Works Section */}
+      <HowItWorks />
+
+      {/* 5. Why Choose Us Section */}
+      <WhyUs />
+
+      {/* 6. Client Testimonials Carousel */}
+      <Testimonials />
+
+      {/* 7. Collapsible FAQ Section */}
+      <FAQ />
+
+      {/* 8. Call To Action Banner */}
+      <CTA />
+
     </div>
   );
 }

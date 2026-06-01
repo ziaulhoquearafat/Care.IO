@@ -29,8 +29,9 @@ export function ServiceCard({
     "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80";
 
   return (
-    <Card className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg border-foreground/10 hover:border-primary/20 bg-card/60 backdrop-blur-sm rounded-none">
+    <Card className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg border-foreground/10 hover:border-primary/20 bg-card/60 hover:bg-card/85 backdrop-blur-sm rounded-none">
       {/* Top Image Section */}
+
       <div className="relative w-full h-[200px] overflow-hidden bg-muted">
         <Image
           src={displayImage}

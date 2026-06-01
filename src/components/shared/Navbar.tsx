@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
@@ -13,6 +14,31 @@ interface NavbarProps {
 
 export function Navbar({ isLoggedIn = false }: NavbarProps) {
   const [isOpen, setIsOpen] = React.useState(false);
+  const pathname = usePathname();
+
+  // Helper to determine if a route is currently active
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(path);
+  };
+
+  // Helper to get desktop link styles
+  const getDesktopStyles = (path: string) => {
+    const active = isActive(path);
+    return active
+      ? "text-xs font-semibold text-primary transition-colors"
+      : "text-xs font-medium text-muted-foreground hover:text-foreground transition-colors";
+  };
+
+  // Helper to get mobile link styles
+  const getMobileStyles = (path: string) => {
+    const active = isActive(path);
+    return active
+      ? "block rounded-md px-3 py-2 text-base font-semibold text-primary bg-primary/5 transition-all"
+      : "block rounded-md px-3 py-2 text-base font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-all";
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-foreground/10 bg-background/80 backdrop-blur-md transition-all">
@@ -26,29 +52,17 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link
-            href="/"
-            className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
+          <Link href="/" className={getDesktopStyles("/")}>
             Home
           </Link>
-          <Link
-            href="/service"
-            className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
+          <Link href="/service" className={getDesktopStyles("/service")}>
             Services
           </Link>
-          <Link
-            href="/about"
-            className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
+          <Link href="/about" className={getDesktopStyles("/about")}>
             About
           </Link>
           {isLoggedIn && (
-            <Link
-              href="/my-bookings"
-              className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
-            >
+            <Link href="/my-bookings" className={getDesktopStyles("/my-bookings")}>
               My Bookings
             </Link>
           )}
@@ -97,21 +111,21 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
             <Link
               href="/"
               onClick={() => setIsOpen(false)}
-              className="block rounded-md px-3 py-2 text-base font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
+              className={getMobileStyles("/")}
             >
               Home
             </Link>
             <Link
               href="/service"
               onClick={() => setIsOpen(false)}
-              className="block rounded-md px-3 py-2 text-base font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
+              className={getMobileStyles("/service")}
             >
               Services
             </Link>
             <Link
               href="/about"
               onClick={() => setIsOpen(false)}
-              className="block rounded-md px-3 py-2 text-base font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
+              className={getMobileStyles("/about")}
             >
               About
             </Link>
@@ -119,7 +133,7 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
               <Link
                 href="/my-bookings"
                 onClick={() => setIsOpen(false)}
-                className="block rounded-md px-3 py-2 text-base font-semibold text-primary hover:bg-muted hover:text-primary transition-all animate-pulse"
+                className={getMobileStyles("/my-bookings")}
               >
                 My Bookings
               </Link>

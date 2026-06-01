@@ -1,7 +1,24 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export function Footer() {
+interface FooterProps {
+  isLoggedIn?: boolean;
+}
+
+export function Footer({ isLoggedIn = false }: FooterProps) {
+  const pathname = usePathname();
+
+  // Helper to determine active styles
+  const getLinkStyles = (path: string) => {
+    const isActive = path === "/" ? pathname === "/" : pathname.startsWith(path);
+    return isActive
+      ? "text-primary font-semibold hover:text-primary transition-colors"
+      : "hover:text-foreground transition-colors";
+  };
+
   return (
     <footer className="w-full border-t border-foreground/10 bg-muted/30 text-muted-foreground transition-all">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -25,25 +42,33 @@ export function Footer() {
             </span>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/" className="hover:text-foreground transition-colors">
+                <Link href="/" className={getLinkStyles("/")}>
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/service" className="hover:text-foreground transition-colors">
+                <Link href="/service" className={getLinkStyles("/service")}>
                   Services
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-foreground transition-colors">
+                <Link href="/about" className={getLinkStyles("/about")}>
                   About Us
                 </Link>
               </li>
-              <li>
-                <Link href="/login" className="hover:text-foreground transition-colors">
-                  Login
-                </Link>
-              </li>
+              {isLoggedIn ? (
+                <li>
+                  <Link href="/my-bookings" className={getLinkStyles("/my-bookings")}>
+                    My Bookings
+                  </Link>
+                </li>
+              ) : (
+                <li>
+                  <Link href="/login" className={getLinkStyles("/login")}>
+                    Login
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
 

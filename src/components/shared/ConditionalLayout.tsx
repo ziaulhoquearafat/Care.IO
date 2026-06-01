@@ -18,7 +18,7 @@ export function ConditionalLayout({ children, isLoggedIn = false }: ConditionalL
     <>
       {!isAuthRoute && <Navbar isLoggedIn={isLoggedIn} />}
       <main className="flex-grow flex flex-col">{children}</main>
-      {!isAuthRoute && <Footer />}
+      {!isAuthRoute && <Footer isLoggedIn={isLoggedIn} />}
     </>
   );
 }

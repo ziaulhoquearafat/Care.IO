@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, User, Calendar, LogOut } from "lucide-react";
+import { Menu, X, User, Calendar, LogOut, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 
@@ -14,7 +14,7 @@ interface NavbarProps {
 export function Navbar({ isLoggedIn = false }: NavbarProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
-  const [userProfile, setUserProfile] = React.useState<{ name: string; email: string } | null>(null);
+  const [userProfile, setUserProfile] = React.useState<{ name: string; email: string; role?: string } | null>(null);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
@@ -133,6 +133,11 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
           <Link href="/about" className={getDesktopStyles("/about")}>
             About
           </Link>
+          {userProfile?.role === "admin" && (
+            <Link href="/admin-dashboard" className={getDesktopStyles("/admin-dashboard")}>
+              Dashboard
+            </Link>
+          )}
         </nav>
 
         {/* Desktop Action Buttons & ThemeToggle */}
@@ -162,6 +167,17 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
                   </div>
 
                   {/* Dropdown Navigation Links */}
+                  {userProfile?.role === "admin" && (
+                    <Link
+                      href="/admin-dashboard"
+                      onClick={() => setIsDropdownOpen(false)}
+                      className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors rounded-none w-full text-left"
+                    >
+                      <Briefcase className="size-3.5 text-primary" />
+                      <span>Admin Dashboard</span>
+                    </Link>
+                  )}
+
                   <Link
                     href="/profile"
                     onClick={() => setIsDropdownOpen(false)}
@@ -252,6 +268,15 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
 
             {isLoggedIn && (
               <>
+                {userProfile?.role === "admin" && (
+                  <Link
+                    href="/admin-dashboard"
+                    onClick={() => setIsOpen(false)}
+                    className={getMobileStyles("/admin-dashboard")}
+                  >
+                    Dashboard
+                  </Link>
+                )}
                 <Link
                   href="/profile"
                   onClick={() => setIsOpen(false)}

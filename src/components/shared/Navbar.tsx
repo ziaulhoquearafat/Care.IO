@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, User, Calendar, LogOut, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
+import Swal from "sweetalert2";
 
 interface NavbarProps {
   isLoggedIn?: boolean;
@@ -66,11 +67,21 @@ export function Navbar({ isLoggedIn = false }: NavbarProps) {
         router.push("/login");
         router.refresh();
       } else {
-        alert(result.message || "Failed to log out.");
+        Swal.fire({
+          icon: "error",
+          title: "Logout Failed",
+          text: result.message || "Failed to log out.",
+          confirmButtonColor: "var(--primary)"
+        });
       }
     } catch (error) {
       console.error("Logout error:", error);
-      alert("An error occurred during logout.");
+      Swal.fire({
+        icon: "error",
+        title: "Logout Error",
+        text: "An error occurred during logout.",
+        confirmButtonColor: "var(--primary)"
+      });
     }
   };
 

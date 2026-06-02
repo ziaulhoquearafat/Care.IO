@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { IApiResponse } from "@/types";
+import Swal from "sweetalert2";
 
 export function LogoutButton() {
   const router = useRouter();
@@ -21,11 +22,21 @@ export function LogoutButton() {
         router.push("/login");
         router.refresh();
       } else {
-        alert(result.message || "Failed to log out.");
+        Swal.fire({
+          icon: "error",
+          title: "Logout Failed",
+          text: result.message || "Failed to log out.",
+          confirmButtonColor: "var(--primary)"
+        });
       }
     } catch (error) {
       console.error("Logout button error:", error);
-      alert("An error occurred during logout.");
+      Swal.fire({
+        icon: "error",
+        title: "Logout Error",
+        text: "An error occurred during logout.",
+        confirmButtonColor: "var(--primary)"
+      });
     } finally {
       setLoading(false);
     }

@@ -7,6 +7,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import locationsData from "@/data/locations.json";
 import { Button } from "@/components/ui/button";
+import Swal from "sweetalert2";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -107,7 +108,12 @@ export function BookingForm({ service }: BookingFormProps) {
     e.preventDefault();
 
     if (!selectedRegion || !selectedDistrict || !selectedCity || !selectedArea) {
-      alert("Please complete the entire geographical location address.");
+      Swal.fire({
+        icon: "warning",
+        title: "Incomplete Address",
+        text: "Please complete the entire geographical location address.",
+        confirmButtonColor: "var(--primary)",
+      });
       return;
     }
 
@@ -165,11 +171,21 @@ export function BookingForm({ service }: BookingFormProps) {
           console.error("Failed to communicate with Stripe creation API:", paymentErr);
         }
       } else {
-        alert(result.message || "Failed to initialize the booking.");
+        Swal.fire({
+          icon: "error",
+          title: "Booking Failed",
+          text: result.message || "Failed to initialize the booking.",
+          confirmButtonColor: "var(--primary)",
+        });
       }
     } catch (err) {
       console.error("Booking error:", err);
-      alert("A system error occurred. Please try again.");
+      Swal.fire({
+        icon: "error",
+        title: "System Error",
+        text: "A system error occurred. Please try again.",
+        confirmButtonColor: "var(--primary)",
+      });
     } finally {
       setSubmitting(false);
     }
